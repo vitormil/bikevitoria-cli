@@ -44,7 +44,7 @@ http.get({
         var sandbox = {beaches: []};
 
         const script = new vm.Script(match[1]);
-        const context = new vm.createContext(sandbox);
+        const context = vm.createContext(sandbox);
         script.runInContext(context);
 
         context.beaches.forEach(function (station) {
