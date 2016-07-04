@@ -36,16 +36,16 @@ const isStationOffline = function (station) {
 };
 
 const prepareRow = function(station) {
-  var row = [station.id, station.name, twoDigitsStr(station.freePositions) + ' of ' + twoDigitsStr(station.bikes + station.freePositions)];
+  var row = [station.id, station.name, twoDigitsStr(station.bikes) + ' of ' + twoDigitsStr(station.bikes + station.freePositions)];
 
-  if (station.freePositions == 0) {
-    color = 'red';
+  if (station.bikes == 0) {
+    row[1] = row[1].red
+    row[2] = row[2].red
   } else {
-    color = 'green';
+    row[2] = row[2].green
   }
-  row[2] = row[2][color]
 
-  if (station.freePositions == (station.freePositions + station.bikes)) {
+  if (station.bikes == (station.freePositions + station.bikes)) {
     row[1] = row[1].rainbow
   }
 
