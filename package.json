@@ -17,6 +17,7 @@
     "start": "node $npm_package_main"
   },
   "dependencies": {
+    "cliff": "^0.1.10",
     "commander": "~2.9.0"
   }
 }

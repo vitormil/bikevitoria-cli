@@ -4,6 +4,8 @@ const program = require('commander');
 const http = require('http');
 const util = require('util');
 const vm = require('vm');
+const cliff = require('cliff');
+
 var stations = [];
 
 program
@@ -15,18 +17,37 @@ const buildStation = function (raw) {
   return {
     'id': raw[12],
     'name': raw[0],
-    'bikes': raw[8],
-    'freePositions': raw[9]
+    'bikes': parseInt(raw[8]),
+    'freePositions': parseInt(raw[9])
   }
 };
 
+const twoDigitsStr = function (intValue) {
+  return intValue.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+};
+
 const printStations = function () {
+  var rows = [
+    ['Station'.bold.inverse, 'Name'.bold.inverse, 'Bikes available'.bold.inverse]
+  ];
+
   stations.forEach(function (station) {
     if (program.station && station.id != program.station) {
       return
     }
-    console.log(station.id + ' - ' + station.name + ' Bikes: ' + station.bikes + ' Free: ' + station.freePositions);
+    const row = [station.id, station.name, twoDigitsStr(station.freePositions) + ' of ' + twoDigitsStr(station.bikes + station.freePositions)];
+
+    if (station.freePositions == 0) {
+      color = 'red';
+    } else {
+      color = 'green';
+    }
+    row[2] = row[2][color]
+
+    rows.push(row);
   });
+
+  console.log(cliff.stringifyRows(rows));
 }
 
 http.get({
