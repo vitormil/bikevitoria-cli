@@ -18,7 +18,8 @@ const buildStation = function (raw) {
     'id': raw[12],
     'name': raw[0],
     'bikes': parseInt(raw[8]),
-    'freePositions': parseInt(raw[9])
+    'freePositions': parseInt(raw[9]),
+    'image': raw[11]
   }
 };
 
@@ -26,8 +27,12 @@ const twoDigitsStr = function (intValue) {
   return intValue.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
 };
 
-const showStation = function(station) {
+const showStation = function (station) {
   return typeof(program.station) == 'undefined' || (',' + program.station + ',').indexOf(',' + station.id + ',') != -1;
+};
+
+const isStationOffline = function (station) {
+  return station.image.indexOf('offline') != -1;
 };
 
 const prepareRow = function(station) {
@@ -42,6 +47,10 @@ const prepareRow = function(station) {
 
   if (station.freePositions == (station.freePositions + station.bikes)) {
     row[1] = row[1].rainbow
+  }
+
+  if (isStationOffline(station)) {
+    row[1] = row[1] + ' (offline)'.red
   }
 
   return row;
