@@ -10,7 +10,7 @@ var stations = [];
 
 program
   .version('0.0.1')
-  .option('-s, --station [id]', 'Filter by station number')
+  .option('-s, --station [ids comma-separated]', 'Filter by station(s)')
   .parse(process.argv);
 
 const buildStation = function (raw) {
@@ -23,33 +23,43 @@ const buildStation = function (raw) {
 };
 
 const twoDigitsStr = function (intValue) {
-  return intValue.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false});
+  return intValue.toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping: false});
+};
+
+const showStation = function(station) {
+  return typeof(program.station) == 'undefined' || (',' + program.station + ',').indexOf(',' + station.id + ',') != -1;
+};
+
+const prepareRow = function(station) {
+  var row = [station.id, station.name, twoDigitsStr(station.freePositions) + ' of ' + twoDigitsStr(station.bikes + station.freePositions)];
+
+  if (station.freePositions == 0) {
+    color = 'red';
+  } else {
+    color = 'green';
+  }
+  row[2] = row[2][color]
+
+  if (station.freePositions == (station.freePositions + station.bikes)) {
+    row[1] = row[1].rainbow
+  }
+
+  return row;
 };
 
 const printStations = function () {
+  var station;
   var rows = [
     ['Station'.bold.inverse, 'Name'.bold.inverse, 'Bikes available'.bold.inverse]
   ];
 
-  stations.forEach(function (station) {
-    if (program.station && station.id != program.station) {
-      return
-    }
-    const row = [station.id, station.name, twoDigitsStr(station.freePositions) + ' of ' + twoDigitsStr(station.bikes + station.freePositions)];
+  for (var i = 0; i < stations.length; i++) {
+    station = stations[i];
 
-    if (station.freePositions == 0) {
-      color = 'red';
-    } else {
-      color = 'green';
+    if (showStation(station)) {
+      rows.push(prepareRow(station));
     }
-    row[2] = row[2][color]
-
-    if (station.freePositions == (station.freePositions + station.bikes)) {
-      row[1] = row[1].rainbow
-    }
-
-    rows.push(row);
-  });
+  }
 
   console.log(cliff.stringifyRows(rows));
 }
