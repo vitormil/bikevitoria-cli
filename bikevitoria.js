@@ -11,6 +11,7 @@ var stations = [];
 program
   .version('0.0.1')
   .option('-s, --station [ids comma-separated]', 'Filter by station(s)')
+  .option('-A, --all', 'List all stations (force)')
   .parse(process.argv);
 
 const buildStation = function (raw) {
@@ -28,7 +29,9 @@ const twoDigitsStr = function (intValue) {
 };
 
 const showStation = function (station) {
-  return typeof(program.station) == 'undefined' || (',' + program.station + ',').indexOf(',' + station.id + ',') != -1;
+  return program.all ||
+    typeof(program.station) == 'undefined' ||
+    (',' + program.station + ',').indexOf(',' + station.id + ',') != -1;
 };
 
 const isStationOffline = function (station) {
