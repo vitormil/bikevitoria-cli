@@ -100,4 +100,10 @@ http.get({
 
         printStations();
     });
+}).on('error', (e) => {
+  if (e.errno && e.errno === 'ENOTFOUND') {
+    console.error('There is no Internet connection.');
+  } else {
+    console.error(e)
+  }
 });
