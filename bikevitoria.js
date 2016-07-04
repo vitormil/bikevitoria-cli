@@ -44,6 +44,10 @@ const printStations = function () {
     }
     row[2] = row[2][color]
 
+    if (station.freePositions == (station.freePositions + station.bikes)) {
+      row[1] = row[1].rainbow
+    }
+
     rows.push(row);
   });
 
