@@ -1,0 +1,22 @@
+{
+  "name": "@vitormil/bikevitoria-cli",
+  "version": "0.0.1",
+  "description": "Bike Vitoria in your console",
+  "license": "MIT",
+  "author": "Vitor Oliveira",
+  "homepage": "https://github.com/vitormil/bikevitoria-cli",
+  "bugs": {
+    "url": "https://github.com/vitormil/bikevitoria-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitormil/bikevitoria-cli.git"
+  },
+  "main": "bikevitoria.js",
+  "scripts": {
+    "start": "node $npm_package_main"
+  },
+  "dependencies": {
+    "commander": "~2.9.0"
+  }
+}
